@@ -1,0 +1,27 @@
+{% extends 'todo/base.html' %}
+{% block content %}
+<div class="todo-container fade-in">
+    <div class="header slide-down">
+        <h2>Hello, {{ user.username }} 👋</h2>
+        <a href="{% url 'add_task' %}" class="add-task-btn">+ Add Task</a>
+    </div>
+
+    <ul class="task-list">
+        {% for task in tasks %}
+        <li class="task-card {% if task.completed %}completed{% endif %} slide-up">
+            <form action="{% url 'update_task' task.id %}" method="post">
+                {% csrf_token %}
+                <label class="checkbox-container">
+                    <input type="checkbox" {% if task.completed %}checked{% endif %} onchange="this.form.submit();">
+                    <span class="custom-checkmark"></span>
+                    <span class="task-title">{{ task.title }}</span>
+                </label>
+            </form>
+            <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
+        </li>
+        {% empty %}
+        <li class="empty-message fade-in">🎉 No tasks added yet! Start being productive ✨</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

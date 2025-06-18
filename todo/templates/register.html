@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register | Z2life</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet" />
+
+{{ field.label }}
+
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* === SVG PARTICLES === */
+    .background-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    circle, polygon {
+      opacity: 0.1;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    polygon {
+      fill: #00eaff22;
+      filter: drop-shadow(0 0 6px #00eaff88);
+    }
+
+    circle.dot {
+      fill: #00eaffcc;
+      opacity: 0.3;
+    }
+
+    /* === REGISTER CARD === */
+    .register-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 16px #00eaff99;
+      backdrop-filter: blur(20px);
+      color: #fff;
+      width: 420px;
+      animation: floatCard 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatCard {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .register-title {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 30px;
+      color: #00eaff;
+      text-shadow: 0 0 8px #00eaffaa;
+      font-weight: 700;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-wrapper {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      transition: 0.3s ease;
+    }
+
+    .input-wrapper:hover {
+      border-color: #00eaffbb;
+      box-shadow: 0 0 14px #00eaff55;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: #00eaff;
+      box-shadow: 0 0 18px #00eaffaa;
+    }
+
+    .input-wrapper i {
+      margin-right: 12px;
+      color: #00eaff;
+      font-size: 1.1rem;
+    }
+
+    .input-wrapper input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #e0f7ff;
+      font-size: 1rem;
+      width: 100%;
+      padding-bottom: 6px;
+      border-bottom: 2px solid transparent;
+      transition: 0.3s ease;
+    }
+
+    .input-wrapper input:focus {
+      border-bottom: 2px solid #00eaff;
+    }
+
+    .toggle-password {
+      cursor: pointer;
+      margin-left: 10px;
+      color: #00eaffcc;
+      transition: 0.3s ease;
+    }
+
+    .toggle-password:hover {
+      color: #00eaff;
+    }
+
+    .error {
+      color: #ff5f5f;
+      font-size: 13px;
+      margin-top: 6px;
+      font-weight: 600;
+      text-shadow: 0 0 4px #ff5f5f99;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #00eaff, #0088aa);
+      color: #000;
+      font-weight: 700;
+      font-size: 1.15rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px #00eaffaa;
+      transition: 0.3s ease;
+    }
+
+    .register-btn:hover {
+      background: linear-gradient(90deg, #00c9ff, #004e60);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px #00eaffdd;
+    }
+
+    .register-btn::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+      transform: translateX(-100%) rotate(25deg);
+      transition: 0.6s ease;
+    }
+
+    .register-btn:hover::before {
+      transform: translateX(100%) rotate(25deg);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Background SVG particles -->
+  <svg class="background-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <circle cx="15%" cy="20%" r="10" fill="#00eaff10">
+      <animate attributeName="cy" values="20%;25%;20%" dur="6s" repeatCount="indefinite" />
+      <animate attributeName="cx" values="15%;18%;15%" dur="7s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="85%" cy="80%" r="16" fill="#00eaff10">
+      <animate attributeName="cy" values="80%;75%;80%" dur="8s" repeatCount="indefinite" />
+      <animate attributeName="cx" values="85%;82%;85%" dur="9s" repeatCount="indefinite" />
+    </circle>
+
+    <polygon points="50,10 60,25 40,25" fill="#00eaff20">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 20" to="360 50 20" dur="12s" repeatCount="indefinite"/>
+    </polygon>
+    <polygon points="70,85 85,95 55,95" fill="#00eaff20">
+      <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="360 70 90" to="0 70 90" dur="15s" repeatCount="indefinite"/>
+    </polygon>
+
+    <circle class="dot" cx="30%" cy="40%" r="2" />
+    <circle class="dot" cx="75%" cy="15%" r="3" />
+    <circle class="dot" cx="55%" cy="75%" r="2.5" />
+  </svg>
+
+  <!-- Register Form Card -->
+  <div class="register-card">
+    <h2 class="register-title">Welcome to Z2life</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="input-group">
+          {{ field.label_tag }}
+          <div class="input-wrapper">
+            {% if 'password' in field.name %}
+              <i class="fas fa-lock"></i>
+            {% else %}
+              <i class="fas fa-user"></i>
+            {% endif %}
+            {{ field }}
+            {% if 'password' in field.name %}
+              <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
+            {% endif %}
+          </div>
+          {% if field.errors %}
+            <small class="error">{{ field.errors.0 }}</small>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="register-btn">Register</button>
+    </form>
+  </div>
+
+  <!-- Toggle Password Script -->
+  <script>
+    function togglePassword(icon) {
+      const input = icon.previousElementSibling;
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'todo/base.html' %}
+{% load static %}
+{% block content %}
+<div class="task-form-wrapper fixed-form-corner" data-aos="fade-down-right">
+  <div class="form-card glassy-card slide-in-top">
+    <h2 class="form-title neon-glow">
+      <i class="fas fa-pencil-alt fa-shake"></i> Add New Task
+    </h2>
+    <form method="POST" class="task-form">
+      {% csrf_token %}
+
+      <div class="input-group floating">
+        <input type="text" name="title" id="id_title" class="form-input" placeholder=" " required>
+        <label for="id_title"><i class="fas fa-pen"></i> Task Title</label>
+        <i class="fas fa-tasks input-icon spin-hover"></i>
+      </div>
+
+      <label for="id_completed" class="form-label checkbox-label bounce-hover">
+        <input type="checkbox" name="completed" id="id_completed" class="form-checkbox">
+        <i class="fas fa-check-double"></i> Mark as Completed
+      </label>
+
+      <button type="submit" class="save-btn glow-btn wobble-hover">
+        <i class="fas fa-save fa-beat"></i> Save Task
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% for field in form %}
+  <div class="input-group">
+    {{ field.label_tag }}
+    <div class="input-wrapper">
+      {% if 'password' in field.name %}
+        <i class="fas fa-lock"></i>
+      {% else %}
+        <i class="fas fa-user"></i>
+      {% endif %}
+      {{ field }}
+      {% if 'password' in field.name %}
+        <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
+      {% endif %}
+    </div>
+    {% if field.errors %}
+      <small class="error">{{ field.errors.0 }}</small>
+    {% endif %}
+  </div>
+{% endfor %}

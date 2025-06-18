@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup - MyTaskBoard</title>
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+  <div class="auth-container">
+    <form method="post" class="auth-card" data-aos="zoom-in">
+      {% csrf_token %}
+      <h2>Create Account</h2>
+      <p>Join today task</p>
+      {{ form.as_p }}
+      <button type="submit">Sign Up</button>
+      <div class="auth-links">
+        <a href="{% url 'login' %}">Log In</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

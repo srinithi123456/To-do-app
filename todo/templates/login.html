@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Z2life</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      height: 100vh;
+      background: #0f2027;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      top: 0;
+      left: 0;
+    }
+
+    .login-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(25px);
+      border-radius: 20px;
+      padding: 50px 40px;
+      width: 400px;
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: zoomIn 1s ease forwards;
+      color: #fff;
+    }
+
+    .login-title {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #00eaff;
+      text-shadow: 0 0 15px #00eaff99;
+      animation: glow 2s infinite alternate;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      position: relative;
+      transition: box-shadow 0.3s;
+    }
+
+    .input-wrapper:hover {
+      box-shadow: 0 0 12px #00eaff88;
+    }
+
+    .input-wrapper i {
+      color: #00eaff;
+      margin-right: 10px;
+    }
+
+    .input-wrapper input {
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      color: #00eaffcc;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(to right, #00eaff, #00c2ff);
+      color: #000;
+      box-shadow: 0 0 20px #00eaff99;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .login-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 35px #00eaffcc;
+    }
+
+    .login-footer {
+      margin-top: 25px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .login-footer a {
+      color: #00eaff;
+      text-decoration: none;
+    }
+
+    .login-footer a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .error {
+      font-size: 13px;
+      color: #ff6b6b;
+      margin-top: 5px;
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #00eaff88;
+      }
+      to {
+        text-shadow: 0 0 25px #00eaffcc;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .login-card {
+        width: 90%;
+        padding: 35px 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Particle background -->
+<div id="particles-js"></div>
+
+<!-- Glassy Login Card -->
+<div class="login-card">
+  <h2 class="login-title">Welcome to Z2life</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <!-- Username -->
+    <div class="input-group">
+      {{ form.username.label_tag }}
+      <div class="input-wrapper">
+        <i class="fas fa-user"></i>
+        {{ form.username }}
+      </div>
+      {% if form.username.errors %}
+        <div class="error">{{ form.username.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Password -->
+    <div class="input-group">
+      {{ form.password.label_tag }}
+      <div class="input-wrapper">
+        <i class="fas fa-lock"></i>
+        {{ form.password }}
+        <i class="fas fa-eye toggle-password" onclick="togglePassword(this)"></i>
+      </div>
+      {% if form.password.errors %}
+        <div class="error">{{ form.password.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Optional Batch Field -->
+    {% if form.batch %}
+    <div class="input-group">
+      {{ form.batch.label_tag }}
+      <div class="input-wrapper">
+        <i class="fas fa-graduation-cap"></i>
+        {{ form.batch }}
+      </div>
+      {% if form.batch.errors %}
+        <div class="error">{{ form.batch.errors.0 }}</div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Submit -->
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+
+  <div class="login-footer">
+    <a href="{% url 'password_reset' %}">Forgot password?</a>
+    <p>Don’t have an account? <a href="{% url 'register' %}">Register</a></p>
+  </div>
+</div>
+
+<!-- Toggle Password -->
+<script>
+  function togglePassword(icon) {
+    const input = icon.previousElementSibling;
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  }
+</script>
+
+<!-- Particles.js config -->
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 60 },
+      color: { value: "#00eaff" },
+      shape: { type: "circle" },
+      opacity: { value: 0.15 },
+      size: { value: 3 },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#00eaff",
+        opacity: 0.1,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 2,
+        direction: "none",
+        out_mode: "out"
+      }
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" }
+      },
+      modes: {
+        repulse: { distance: 80 },
+        push: { particles_nb: 4 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+
+</body>
+</html>

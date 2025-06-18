@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ToDo Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body class="page-body no-scrollbar">
+
+<!-- Animated SVG Background -->
+<div class="svg-animated-background">
+  <svg class="blob" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(300,300)">
+      <path fill="#00eaff33">
+        <animate attributeName="d" dur="18s" repeatCount="indefinite"
+          values="M130,-140Q160,-100,140,-50Q120,-10,70,-20Q30,-20,20,20Q10,60,0,100Q-10,140,-60,120Q-110,100,-140,60Q-170,20,-130,-20Q-90,-60,-70,-100Q-50,-140,-10,-150Q30,-160,70,-150Q110,-140,130,-140Z;
+                  M120,-130Q150,-80,130,-30Q100,0,70,10Q40,40,0,90Q-40,100,-80,90Q-100,60,-120,20Q-130,-10,-110,-50Q-90,-90,-60,-120Q-30,-140,0,-150Q30,-140,60,-130Q90,-120,120,-130Z;
+                  M130,-140Q160,-100,140,-50Q120,-10,70,-20Q30,-20,20,20Q10,60,0,100Q-10,140,-60,120Q-110,100,-140,60Q-170,20,-130,-20Q-90,-60,-70,-100Q-50,-140,-10,-150Q30,-160,70,-150Q110,-140,130,-140Z" />
+      </path>
+    </g>
+  </svg>
+</div>
+
+<!-- Header Section -->
+<main class="dashboard-section glassy-box" data-aos="fade-down" data-aos-duration="800">
+  <h2 class="dashboard-heading neon-text animate__animated animate__pulse">
+    <i class="fas fa-bolt-lightning animate__animated animate__flip animate__slower"></i> Smart Task 
+  </h2>
+
+  <form method="POST" class="task-form" id="taskForm" data-aos="zoom-in">
+    {% csrf_token %}
+    <div class="input-group animated-input">
+      <input type="text" name="title" id="taskInput" class="form-input" maxlength="80" required placeholder="✍️ Add your next task..." />
+    </div>
+
+    <label class="checkbox-group">
+      <input type="checkbox" name="completed" id="taskComplete" />
+      <span class="checkbox-label"><i class="fas fa-check-double"></i> Mark as Done</span>
+    </label>
+
+    <button type="submit" class="save-btn glow-btn">
+      <i class="fas fa-plus-circle animate__animated animate__tada"></i> Add Task
+    </button>
+  </form>
+</main>
+
+
+
+{% if messages %}
+<div class="alerts" data-aos="fade-in">
+  {% for message in messages %}
+    <div class="alert animate__animated animate__fadeInDown">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="svg-divider" data-aos="fade-up">
+  <svg viewBox="0 0 1440 150">
+    <path fill="#00eaff44" d="M0,64L60,90.7C120,117,240,171,360,181.3C480,192,600,160,720,138.7C840,117,960,107,1080,122.7C1200,139,1320,181,1380,202.7L1440,224L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path>
+  </svg>
+</div>
+
+<aside class="sidebar glassy-box enhanced-sidebar" data-aos="fade-left" data-aos-delay="100">
+
+<!-- ALL TASKS -->
+<div class="task-box card-box glassy-card" data-aos="fade-up" data-aos-delay="100">
+  <h3 class="box-heading neon-text"><i class="fas fa-tasks fa-shake"></i> All Tasks</h3>
+  <ul class="task-list">
+    {% for task in tasks %}
+      <li class="task-item task-card animated-hover {% if task.completed %}completed{% else %}pending{% endif %}" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+        <span class="badge {% if task.completed %}badge-complete pulse{% else %}badge-pending bounce{% endif %}">
+          {% if task.completed %}
+            ✅
+          {% else %}
+            🕒
+          {% endif %}
+        </span>
+        <span class="task-title {% if task.completed %}strike{% endif %}">{{ task.title }}</span>
+        <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
+      </li>
+    {% empty %}
+      <li class="no-tasks animate__animated animate__fadeIn"><i class="fas fa-box-open"></i> No tasks available.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- PENDING TASKS -->
+<div class="task-box card-box glassy-card" data-aos="fade-up" data-aos-delay="200">
+  <h3 class="box-heading neon-text"><i class="fas fa-hourglass-half fa-spin"></i> Pending</h3>
+  <ul class="task-list">
+    {% for task in pending_tasks %}
+      <li class="task-item task-card animated-hover pending" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+        <span class="badge badge-pending bounce">🕒</span>
+        <span class="task-title">{{ task.title }}</span>
+        <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
+      </li>
+    {% empty %}
+      <li class="no-tasks animate__animated animate__fadeIn"><i class="fas fa-smile-beam"></i> No pending tasks yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- COMPLETED TASKS -->
+<div class="task-box card-box glassy-card" data-aos="fade-up" data-aos-delay="300">
+  <h3 class="box-heading neon-text"><i class="fas fa-check-circle fa-beat"></i> Completed</h3>
+  <ul class="task-list">
+    {% for task in completed_tasks %}
+      <li class="task-item task-card animated-hover completed" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+        <span class="badge badge-complete pulse">✅</span>
+        <span class="task-title strike">{{ task.title }}</span>
+        <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
+      </li>
+    {% empty %}
+      <li class="no-tasks animate__animated animate__fadeIn"><i class="fas fa-inbox"></i> No completed tasks yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<footer class="footer">
+  <p>&copy; <strong>Build by</strong> —Srinithi Mathiyalagan</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode.min.js"></script>
+<script src="{% static 'js/todo.js' %}"></script>
+<script>
+  AOS.init();
+  const darkmode = new Darkmode({ label: "🌓", autoMatchOsTheme: true });
+  darkmode.showWidget();
+  document.getElementById("fab").addEventListener("click", () => {
+    const input = document.getElementById("taskInput");
+    input.focus();
+    input.classList.add("input-focus-animation");
+    setTimeout(() => input.classList.remove("input-focus-animation"), 800);
+  });
+</script>
+<script>
+  function filterTasks(type) {
+    document.getElementById("all-tasks").style.display = "none";
+    document.getElementById("pending-tasks").style.display = "none";
+    document.getElementById("completed-tasks").style.display = "none";
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    if (type === 'all') {
+      document.getElementById("all-tasks").style.display = "block";
+    } else if (type === 'pending') {
+      document.getElementById("pending-tasks").style.display = "block";
+    } else if (type === 'completed') {
+      document.getElementById("completed-tasks").style.display = "block";
+    }
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
