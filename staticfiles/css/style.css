@@ -61,6 +61,7 @@ body {
   z-index: 1;
 }
 
+
 /* Task box hover */
 .task-box:hover {
   box-shadow: 0 0 20px 5px #00eaffaa;
@@ -493,10 +494,7 @@ body {
   }
 }
 
-/* Zoom-in animation for tasks on AOS */
-[data-aos="zoom-in"] {
-  transition-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
-}
+
 
 /* ======= Responsive ======= */
 @media (max-width: 768px) {
@@ -742,11 +740,10 @@ html, body {
   height: 100vh;
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
-  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
   padding: 1.5rem 1rem;
   overflow-y: auto;
   z-index: 1000;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  
 }
 
 /* Push main content to the right */
@@ -892,4 +889,212 @@ body, html {
   justify-content: center;
   position: relative;
   z-index: 1;
+}
+/* Limit height of sidebar to viewport */
+.sidebar {
+  max-height: 100vh;
+  overflow-y: auto;  /* Optional: allow scroll only inside if content exceeds */
+  overflow-x: hidden;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Optional: hide scrollbar visually but keep scrolling working */
+.sidebar::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.sidebar {
+  -ms-overflow-style: none;  /* IE 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* Prevent full page scroll */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.task-box {
+  overflow: hidden; /* Prevents content from expanding outside */
+}
+
+/* Make sure task list does not overflow */
+.task-list {
+  margin: 0;
+  padding: 0;
+  max-height: 90vh;  /* Adjust as needed */
+  overflow-y: auto;
+}
+body, html {
+  padding: 0;
+  margin: 0;
+  overflow-y: hidden;
+}
+.filter-tabs {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.filter-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #888;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+}
+
+.filter-btn:hover {
+  background: #4fc3f7;
+  color: #000;
+}
+
+.filter-btn.active {
+  background: #03a9f4;
+  color: white;
+  font-weight: bold;
+}
+
+.task-section {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Glassy top-right filter box */
+.glassy-filter-box {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  gap: 10px;
+  padding: 10px 15px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 234, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 234, 255, 0.3);
+  z-index: 10;
+  animation: fadeInSlide 1s ease-out;
+}
+
+/* Filter button style */
+.filter-btn {
+  background: transparent;
+  border: 1px solid #00eaff;
+  color: #00eaff;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* Hover effect */
+.filter-btn:hover {
+  background-color: #00eaff;
+  color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #00eaffaa;
+}
+
+/* Active press animation */
+.filter-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 6px #00eaffaa inset;
+}
+
+/* Animation */
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 15px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.task-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+.task-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-complete {
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.bg-pending {
+  background: rgba(255, 204, 0, 0.1);
+}
+
+.task-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.task-title.strike {
+  text-decoration: line-through;
+  color: #aaa;
+}
+
+.task-actions .delete-btn {
+  display: inline-block;
+  background: rgba(255, 0, 60, 0.08);
+  padding: 8px;
+  border-radius: 50%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-actions .delete-btn:hover {
+  transform: scale(1.2) rotate(-10deg);
+  box-shadow: 0 0 12px rgba(255, 0, 60, 0.3);
+}
+
+.glassy-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glassy-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 255, 255, 0.1);
 }

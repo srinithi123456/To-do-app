@@ -17,6 +17,7 @@
 <body class="page-body no-scrollbar">
 
 <!-- Animated SVG Background -->
+<!-- Animated SVG Background -->
 <div class="svg-animated-background">
   <svg class="blob" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(300,300)">
@@ -29,6 +30,16 @@
     </g>
   </svg>
 </div>
+
+<div class="task-filters glassy-filter-box" data-aos="fade-left" data-aos-delay="100">
+  <button class="filter-btn" onclick="filterTasks('today')" title="Show Today Tasks">
+    📅 <span>Today</span>
+  </button>
+  <button class="filter-btn" onclick="filterTasks('week')" title="Show This Week Tasks">
+    📆 <span>This Week</span>
+  </button>
+</div>
+
 
 <!-- Header Section -->
 <main class="dashboard-section glassy-box" data-aos="fade-down" data-aos-duration="800">
@@ -72,55 +83,45 @@
 <aside class="sidebar glassy-box enhanced-sidebar" data-aos="fade-left" data-aos-delay="100">
 
 <!-- ALL TASKS -->
-<div class="task-box card-box glassy-card" data-aos="fade-up" data-aos-delay="100">
-  <h3 class="box-heading neon-text"><i class="fas fa-tasks fa-shake"></i> All Tasks</h3>
-  <ul class="task-list">
+<div class="task-box card-box glassy-card enhanced-task-box" data-aos="fade-up" data-aos-delay="100">
+  <h3 class="box-heading neon-text">
+    <i class="fas fa-list-check fa-bounce"></i> My Tasks List
+  </h3>
+
+  <ul class="task-list modern-task-list">
     {% for task in tasks %}
-      <li class="task-item task-card animated-hover {% if task.completed %}completed{% else %}pending{% endif %}" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
-        <span class="badge {% if task.completed %}badge-complete pulse{% else %}badge-pending bounce{% endif %}">
+      <li class="task-item task-card glassy-card-hover {% if task.completed %}completed{% else %}pending{% endif %}" 
+          data-aos="zoom-in-up" 
+          data-aos-delay="{{ forloop.counter0|add:'100' }}">
+
+        <!-- Task Icon -->
+        <div class="task-icon {% if task.completed %}bg-complete{% else %}bg-pending{% endif %}">
           {% if task.completed %}
-            ✅
+            <i class="fas fa-circle-check fa-beat-fade" style="color: #00ff88;"></i>
           {% else %}
-            🕒
+            <i class="fas fa-hourglass-start fa-spin" style="color: #ffcc00;"></i>
           {% endif %}
-        </span>
-        <span class="task-title {% if task.completed %}strike{% endif %}">{{ task.title }}</span>
-        <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
-      </li>
-    {% empty %}
-      <li class="no-tasks animate__animated animate__fadeIn"><i class="fas fa-box-open"></i> No tasks available.</li>
-    {% endfor %}
-  </ul>
-</div>
+        </div>
 
-<!-- PENDING TASKS -->
-<div class="task-box card-box glassy-card" data-aos="fade-up" data-aos-delay="200">
-  <h3 class="box-heading neon-text"><i class="fas fa-hourglass-half fa-spin"></i> Pending</h3>
-  <ul class="task-list">
-    {% for task in pending_tasks %}
-      <li class="task-item task-card animated-hover pending" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
-        <span class="badge badge-pending bounce">🕒</span>
-        <span class="task-title">{{ task.title }}</span>
-        <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
-      </li>
-    {% empty %}
-      <li class="no-tasks animate__animated animate__fadeIn"><i class="fas fa-smile-beam"></i> No pending tasks yet.</li>
-    {% endfor %}
-  </ul>
-</div>
+        <!-- Task Content -->
+        <div class="task-content">
+          <span class="task-title {% if task.completed %}strike{% endif %}">
+            {{ task.title }}
+          </span>
+        </div>
 
-<!-- COMPLETED TASKS -->
-<div class="task-box card-box glassy-card" data-aos="fade-up" data-aos-delay="300">
-  <h3 class="box-heading neon-text"><i class="fas fa-check-circle fa-beat"></i> Completed</h3>
-  <ul class="task-list">
-    {% for task in completed_tasks %}
-      <li class="task-item task-card animated-hover completed" data-aos="zoom-in-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
-        <span class="badge badge-complete pulse">✅</span>
-        <span class="task-title strike">{{ task.title }}</span>
-        <a href="{% url 'delete_task' task.id %}" class="delete-btn" title="Delete Task">🗑️</a>
+        <!-- Task Actions -->
+        <div class="task-actions">
+          <a href="{% url 'delete_task' task.id %}" class="delete-btn glassy-delete" title="Delete Task">
+            <i class="fas fa-xmark-circle fa-beat-fade" style="color: #ff4b5c; font-size: 1.2em;"></i>
+          </a>
+        </div>
+
       </li>
     {% empty %}
-      <li class="no-tasks animate__animated animate__fadeIn"><i class="fas fa-inbox"></i> No completed tasks yet.</li>
+      <li class="no-tasks animate__animated animate__fadeIn">
+        <i class="fas fa-box-open"></i> No tasks available.
+      </li>
     {% endfor %}
   </ul>
 </div>
